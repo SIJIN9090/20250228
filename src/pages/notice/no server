@@ -1,0 +1,65 @@
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const mysql = require("mysql");
+
+const app = express();
+
+// MySQL 연결
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "yourpassword",
+  database: "yourdatabase",
+});
+
+db.connect((err) => {
+  if (err) throw err;
+  console.log("MySQL Connected");
+});
+
+// Multer 설정: 파일 저장 경로 및 파일명 설정
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // 파일 저장 디렉토리
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // 고유한 파일명
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// 공지사항 저장 API
+app.post("/upload", upload.single("file"), (req, res) => {
+  const { title, content } = req.body;
+  const filePath = req.file ? req.file.path : null;
+
+  const query =
+    "INSERT INTO notices (title, content, file_path) VALUES (?, ?, ?)";
+  db.query(query, [title, content, filePath], (err, result) => {
+    if (err) {
+      console.error("DB Error:", err);
+      return res.status(500).json({ message: "파일 업로드 실패" });
+    }
+    res.json({ message: "파일 업로드 및 공지사항 등록 완료!" });
+  });
+});
+
+// 공지사항 상세 조회 API
+app.get("/notice/:id", (req, res) => {
+  const id = req.params.id;
+  const query = "SELECT * FROM notices WHERE id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("DB Error:", err);
+      return res.status(500).json({ message: "공지사항 조회 실패" });
+    }
+    res.json(result[0]);
+  });
+});
+
+// 서버 실행
+app.listen(8080, () => {
+  console.log("서버 실행 중...");
+});
