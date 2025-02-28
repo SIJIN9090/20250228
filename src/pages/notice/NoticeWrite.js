@@ -6,7 +6,7 @@ import axios from "axios";
 
 //관리자 공지작성으로
 
-function NoticelWrite() {
+function NoticelWrite({ handleListClick }) {
   const { auth, setAuth } = useContext(AuthContext);
   const { headers, setHeaders } = useContext(HttpHeadersContext);
 
@@ -186,6 +186,10 @@ function NoticelWrite() {
             </tbody>
           </Table>
         </TableBox>
+        <BottomBox>
+          {" "}
+          <button onClick={handleListClick}>목록</button>
+        </BottomBox>
       </ContentWrapper>
     </Container>
   );
@@ -289,4 +293,14 @@ const FileInputWrapper = styled.div`
     background-color: #f0f0f0;
   }
 `;
+
+const BottomBox = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
 export default NoticelWrite;

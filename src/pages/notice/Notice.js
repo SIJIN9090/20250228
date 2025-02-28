@@ -3,8 +3,10 @@ import styled from "styled-components";
 import axios from "axios";
 import CommonTable from "../../components/common/CommonTable";
 import CustomPagination from "../../components/common/CustomPagination";
+import NoticeWrice from "./NoticeWrite";
+import NoticeDetail from "./NoticeDetail";
 
-function Notice() {
+function Notice({ isWriting, isDetailView }) {
   const [bbsList, setBbsList] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -35,21 +37,27 @@ function Notice() {
 
   return (
     <Container>
-      <ContentWrapper>
-        <CommonTable
-          bbsList={bbsList}
-          columns={columns}
-          linkPrefix={linkValue}
-        />
-        <PaginationBox>
-          <CustomPagination
-            page={page}
-            setPage={setPage}
-            pageSize={pageSize}
-            totalCnt={totalCnt}
+      {isDetailView ? (
+        <NoticeDetail />
+      ) : isWriting ? (
+        <NoticeWrice />
+      ) : (
+        <ContentWrapper>
+          <CommonTable
+            bbsList={bbsList}
+            columns={columns}
+            linkPrefix={linkValue}
           />
-        </PaginationBox>
-      </ContentWrapper>
+          <PaginationBox>
+            <CustomPagination
+              page={page}
+              setPage={setPage}
+              pageSize={pageSize}
+              totalCnt={totalCnt}
+            />
+          </PaginationBox>
+        </ContentWrapper>
+      )}
     </Container>
   );
 }
@@ -118,7 +126,7 @@ const WriteBtn = styled.button`
   border: 1px solid #111111;
 `;
 
-const WriteBtnBox = styled.div`
+const WriteButton = styled.div`
   width: 100%;
   max-width: 1000px;
   display: flex;

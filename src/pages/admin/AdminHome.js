@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import NoticeWrite from "../notice/NoticeWrite";
+import Admin from "./Admin";
 
 function AdminHome() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -62,11 +63,8 @@ function AdminHome() {
         </HomeSectionA>
         <HomeSectionB>
           <div>
-            {selectedIndex === 1 ? (
-              <NoticeWrite />
-            ) : (
-              data[selectedIndex].content
-            )}
+            {data[selectedIndex].content}
+            <Admin />
           </div>
         </HomeSectionB>
         <HomeSectionC>{data[selectedIndex].page}</HomeSectionC>

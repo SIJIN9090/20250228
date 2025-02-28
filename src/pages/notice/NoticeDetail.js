@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { AuthContext, HttpHeadersContext } from "../../context";
 import File from "../file/File";
 
-function NoticeDetail() {
+function NoticeDetail({ handleListClick }) {
   const { headers, setHeaders } = useContext(HttpHeadersContext);
   const [notice, setNotice] = useState({});
   const { noticeId } = useParams();
@@ -89,6 +89,10 @@ function NoticeDetail() {
           <Link to="/notice">
             <Button>취소</Button>
           </Link>
+        </BottomBox>
+        <BottomBox>
+          {" "}
+          <button onClick={handleListClick}>목록</button>
         </BottomBox>
       </ContentWrapper>
     </Container>
